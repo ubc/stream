@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <title>HTML5 Boilerplate: The web's most popular front-end template</title>
+        <meta name="description" content="HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites. Spend more time developing and less time reinventing the wheel.">
+        <meta name="viewport" content="width=device-width">
+    </head>
+    <body>
+
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:3000');
+  socket.on('steam', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+</script>
+
+
+<script>
+  var socket = io.connect( 'http://localhost:3000' ); // TIP: .connect with no args does auto-discovery
+  socket.on( 'connect', function () { // TIP: you can avoid listening on `connect` and listen on events directly too!
+    socket.emit( 'ferret', 'tobi', function (data) {
+      console.log(data); // data will be 'woot'
+    });
+  });
+</script>
+</body>
+</html>
