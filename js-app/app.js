@@ -1,56 +1,41 @@
+var express = require('express');
+var app = express();
+var server 	= require('http').createServer( app );
+var io 		= require('socket.io').listen(server);
 
-var app = require('express')()
-  , server = require('http').createServer(app)
-  , io = require('socket.io').listen(server);
+server.listen(3000); // create the server on port 3000
 
-server.listen(3000);
+app.use(express.bodyParser());
 
-app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/index.html'); // nothing to see here
+var user_logged_on = 0; // 
+
+var SALT = '6cf6e971f7c125615a1ee20510c1c70f';
+
+
+
+app.post('/blog/:key', function( req, res ) {
+  
+ 
+  blog_key = req.params.key; 
+ 
+  // the blog_key is the room id
+  io.sockets.in( blog_key ).emit( 'server-push', { 'type':req.body.type, 'data': req.body.data, 'action': req.body.action } );
+  res.send('success');
 });
 
-
-app.post('/blog/:key', function(req, res){
-	
-  console.log('blog with key just submitted stuff to me ' + req.params.key);
-
-  // send the response to the rest of the other users  
-});
-
-var user_logged_on = 0;
+// 
 io.sockets.on('connection', function (socket) {
-  user_logged_on +=1;
-  
-  console.log('someone connected | number of users connected: ' + user_logged_on);
-  
-  socket.broadcast.emit({clients:user_logged_on}); // this doesn't seem to do anything
-  
-  socket.on('message', function () { return {
-        that: 'only'
-      , '/chat': 'will get'
-    };
-    });
-  
-  socket.on('disconnect', function(){clientDisconnect(socket)});
-
-  // this gets passed when a person visuts the iste
-  /*
-  var tweets = setInterval(function () {
-      
-      socket.emit('stream', tweet);
-		tweet++;
-  }, 1000); // count up every second
-  */
-  // socket.emit('stream', { hello: 'world' });
-  /*socket.on('my other event', function (data) {
-  	
-    console.log(data);
+ 
+  socket.on('subscribe', function(data) { 
+	  	var crypto = require('crypto');
+	  	var hash = crypto.createHash('md5').update( data.room ).digest("hex");
+	  	socket.join(hash);
   });
-  */
+  
+  socket.on('unsubscribe', function(data) { 
+	  var crypto = require('crypto');
+	  var hash = crypto.createHash('md5').update( data.room ).digest("hex");
+	  socket.leave(hash);
+  });
+  
 });
-
-function clientDisconnect(socket){
-  user_logged_on -=1;
-  socket.broadcast.emit({clients:user_logged_on})
-
-}
