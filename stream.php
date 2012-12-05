@@ -184,6 +184,11 @@ class CTLT_Stream {
 			); // end of remote post
 	} // end of send
 
+	/* check to see node server is alive */
+	static function is_node_active() {
+	  $response = wp_remote_post(self::$option['url'], array('method' => 'POST'));
+	  return !isset($response->errors);
+	}
 } // end of CTLT_Steam class
 
 CTLT_Stream::init();
