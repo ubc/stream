@@ -23,6 +23,11 @@ app.post('/blog/:key', function( req, res ) {
   res.send('success');
 });
 
+/* server status request */
+app.post('/server_status', function(req, res) {
+  res.send('online');
+});
+
 // 
 io.sockets.on('connection', function (socket) {
  

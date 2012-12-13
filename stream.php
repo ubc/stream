@@ -56,39 +56,22 @@ class CTLT_Stream {
 
 		self::$add_script = false; // don't add the script on the
 
-		register_setting( 'stream_options', 'stream_options', array(__CLASS__, 'validate_options' ) );
-		add_settings_section( 'stream_main', 'Main Settings', array(__CLASS__, 'section_text' ), 'stream' );
-		add_settings_field( 'plugin_text_string', 'Node Server URL', array(__CLASS__, 'setting_string' ), 'stream', 'stream_main' );
+		register_setting( 'stream_options', 'stream_options');
+		add_settings_section( 'stream_main', 'Main Settings', function() {
+		  echo 'Stream Settings and NodeJS Server Status';
+		}, 'stream' );
+		add_settings_field( 'node_server_url', 'Node Server URL', function() {
+		  $options = get_option('stream_options');
+		  echo "<input id='node-url' name='stream_options[url]' size='40' type='text' value='{$options['url']}' />";
+		}, 'stream', 'stream_main' );
+		add_settings_field( 'node_server_status', 'Node Server status', function() {
+		  echo "<input id='node-status' type='checkbox'" . checked(1, CTLT_Stream::is_node_active(), false) . " disabled='disabled'/>";
+		}, 'stream', 'stream_main' );
 
 	} // end of admin_init
 
 	static function setting_string() {
-		$options = get_option('stream_options');
-		echo "<input id='node-url' name='stream_options[url]' size='40' type='text' value='{$options['url']}' />";
 	} // end of settings string
-
-	/**
-	 * validate_options function.
-	 *
-	 * @access public
-	 * @param mixed $option
-	 * @return void
-	 */
-	function validate_options( $options ) {
-
-		return $options;
-	} // end of validate options
-
-	/**
-	 * section_text function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function section_text( ) {
-		// do we even need this
-
-	} // end of section_text
 
  	/**
  	 * add_menu function.
@@ -146,7 +129,8 @@ class CTLT_Stream {
 	 * @static
 	 * @return void
 	 */
-	static function setting_page() { ?>
+	static function setting_page() {
+?>
 		<div class="wrap">
 		<div id="icon-options-general" class="icon32"><br /></div><h2>Stream Settings</h2>
 		<form action="options.php" method="post">
@@ -186,9 +170,17 @@ class CTLT_Stream {
 
 	/* check to see node server is alive */
 	static function is_node_active() {
-	  $response = wp_remote_post(self::$option['url'], array('method' => 'POST'));
-	  return !isset($response->errors);
+	  //send server_status request to nodejs server
+	  $response = wp_remote_post(self::$option['url'].'/server_status', array('method' => 'POST'));
+	  if(is_object($response) && get_class($response) == 'WP_Error') {
+	    return false;
+	  }
+	  if(isset($response['response']) && isset($response['response']['code']) && $response['response']['code'] == 200) {
+	    return true;
+	  }
+	  return $response;
 	}
+	
 } // end of CTLT_Steam class
 
 CTLT_Stream::init();

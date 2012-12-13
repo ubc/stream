@@ -1,10 +1,10 @@
 // Used by the doT 
 var carry_post_template = doT.template(document.getElementById('post-cpt-single').text);
 
-console.log(CTLT_Stream);
+//console.log(CTLT_Stream);
 /* this part should be in the carry specific file */
 if( typeof CTLT_Stream != "undefined" ) {
-	console.log('hey there');
+//	console.log('hey there');
 	
   	CTLT_Stream.on('server-push', function (data) {
    	if( 'post' == data.type ){
