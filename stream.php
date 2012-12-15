@@ -70,9 +70,6 @@ class CTLT_Stream {
 
 	} // end of admin_init
 
-	static function setting_string() {
-	} // end of settings string
-
  	/**
  	 * add_menu function.
  	 *
