@@ -18,8 +18,7 @@ Do something like the following create an init script init script in /etc/init:
 
 `vi pulsepress-tream.conf`
 
-`
-description  "node.js server for pulsepress stream app"
+`description  "node.js server for pulsepress stream app"
 author		"CTLT"
 
 start on startup
@@ -31,11 +30,9 @@ script
 	
 	exec /usr/local/bin/node /var/wwwnodejs/stream/js-app/app.js 2>&1 >> /var/log/node.log
 
-end script
-`
+end script`
 
 After start/stop like:
-`
-sudo start pulsepress-stream
-sudo stop pulsepress-stream
-`
+
+`sudo start pulsepress-stream
+sudo stop pulsepress-stream`
