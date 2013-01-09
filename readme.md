@@ -15,11 +15,11 @@ If you have upstart running do init script so you can run the app as a service.
 
 Example:
 
-Do something like the following create an  init script in /etc/init: 
+create an init script in /etc/init: 
 
     vi pulsepress-stream.conf  
     
-add the something like the following:
+add something like the following:
 
     description  "pulsepress stream app"
     author	 "You"
