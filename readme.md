@@ -24,7 +24,7 @@ add something like the following:
     description  "pulsepress stream app"
     author	 "You"
 
-    start on startup
+    start on runlevel [2345]
     stop on shutdown
 
     script 
@@ -32,7 +32,7 @@ add something like the following:
         export HOME="/root"
         exec /usr/local/bin/node /var/wwwnodejs/stream/js-app/app.js 2>&1 >> /var/log/node.log
 
-    end script`
+    end script
 
 After start/stop like:
 
