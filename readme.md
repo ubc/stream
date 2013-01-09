@@ -17,7 +17,7 @@ Example:
 
 Do something like the following create an  init script in /etc/init: 
 
-    vi pulsepress-tream.conf  
+    vi pulsepress-stream.conf  
     
 add the something like the following:
 
@@ -38,4 +38,4 @@ After start/stop like:
 
     sudo start pulsepress-stream  
 
-    sudo stop pulsepress-stream`
+    sudo stop pulsepress-stream
