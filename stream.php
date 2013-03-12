@@ -34,8 +34,8 @@ if ( ! class_exists('CTLT_Stream') ):
 			add_action( 'wp_footer', array(__CLASS__, 'print_script' ) );
 			
 			// add the menu to the settings
-			add_action( 'admin_menu', array(__CLASS__,  'add_menu' ) );
-			add_action( 'admin_init', array(__CLASS__,  'admin_init' ) );
+			add_action( 'admin_menu', array(__CLASS__, 'add_menu' ) );
+			add_action( 'admin_init', array(__CLASS__, 'admin_init' ) );
 		}
 		
 		/**
@@ -49,16 +49,9 @@ if ( ! class_exists('CTLT_Stream') ):
 			self::$add_script = false; // don't add the script on the
 			
 			register_setting( 'stream_options', 'stream_options');
-			add_settings_section( 'stream_main', 'Main Settings', function() {
-				echo 'Stream Settings and NodeJS Server Status';
-			}, 'stream' );
-			add_settings_field( 'node_server_url', 'Node Server URL', function() {
-				$options = get_option('stream_options');
-				echo "<input id='node-url' name='stream_options[url]' size='40' type='text' value='{$options['url']}' />";
-			}, 'stream', 'stream_main' );
-			add_settings_field( 'node_server_status', 'Node Server status', function() {
-				echo "<input id='node-status' type='checkbox'" . checked(1, CTLT_Stream::is_node_active(), false) . " disabled='disabled'/>";
-			}, 'stream', 'stream_main' );
+			add_settings_section( 'stream_main', 'Main Settings',     array( __CLASS__, 'setting_section' ), 'stream' );
+			add_settings_field( 'node_server_url', 'Node Server URL', array( __CLASS__, 'setting_server_url' ), 'stream', 'stream_main' );
+			add_settings_field( 'node_server_status', 'Node Server',  array( __CLASS__, 'setting_server_status' ), 'stream', 'stream_main' );
 		}
 		
 		/**
@@ -70,7 +63,7 @@ if ( ! class_exists('CTLT_Stream') ):
 		 */
 		static function add_menu() {
 			add_options_page( 'Stream', 'Stream', 'manage_options', 'stream', array( __CLASS__,  'setting_page' ) );
-		} // end of add_menu
+		}
 		
 		/**
 		 * register_script function.
@@ -104,6 +97,30 @@ if ( ! class_exists('CTLT_Stream') ):
 			wp_print_scripts( 'socket-main' );
 		}
 		
+		static function setting_section() {
+			?>
+			Stream Settings and NodeJS Server Status
+			<?php
+		}
+		
+		static function setting_server_url() {
+			$options = get_option('stream_options');
+			?>
+			<input id="node-url" name="stream_options[url]" size="40" type="text" value="<?php echo $options['url']; ?>" />
+			<?php
+		}
+		
+		static function setting_server_status() {
+			?>
+			<input id="node-status" type="checkbox" disabled="disabled" style="display: none" <?php checked( CTLT_Stream::is_node_active() ); ?> />
+			
+			<?php if ( CTLT_Stream::is_node_active() == true ): ?>
+				<div style="color: green">Connected</div>
+			<?php else: ?>
+				<div style="color: red">Not Found</div>
+			<?php endif;
+		}
+		
 		/**
 		 * setting_page function.
 		 *
@@ -113,14 +130,16 @@ if ( ! class_exists('CTLT_Stream') ):
 		 */
 		static function setting_page() {
 			?>
-				<div class="wrap">
-				<div id="icon-options-general" class="icon32"><br /></div><h2>Stream Settings</h2>
+			<div class="wrap">
+				<div id="icon-options-general" class="icon32"><br /></div>
+				<h2>Stream Settings</h2>
 				<form action="options.php" method="post">
 					<?php settings_fields( 'stream_options' ); ?>
 					<?php do_settings_sections( 'stream' ); ?>
+					<br />
 					<input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e('Save Changes'); ?>" />
 				</form>
-				</div>
+			</div>
 			<?php
 		}
 		
