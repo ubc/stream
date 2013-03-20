@@ -6,9 +6,9 @@
  * Version: 0.2
  * Author: Enej Bajgoric | CTLT DEV
 */
-// an attempt at a node - socket.io and wordpress intergration
+// an attemtmp at a node - socket.io and wordpress intergration
 
-// Load a sample plugin
+// this is the sample plugin
 require( 'carry_update_posts.php' );
 
 if ( ! class_exists('CTLT_Stream') ):
@@ -160,11 +160,7 @@ if ( ! class_exists('CTLT_Stream') ):
 				'httpversion' => '1.0',
 				'blocking'    => true,
 				'headers'     => array( 'content-type' => 'application/json' ),
-				'body'        => json_encode( array(
-					'type'   => $type,
-					'data'   => $data,
-					'action' => $action,
-				) ),
+				'body'        => json_encode( array( 'type' => $type, 'data' => $data, 'action' => $action ) ),
 				'cookies'     => array(),
 			) );
 		}
