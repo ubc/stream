@@ -224,6 +224,7 @@ if ( ! class_exists( 'CTLT_Stream' ) ):
 				$result = get_site_option( 'stream_node_url', '' );
 			endif;
 			
+			$result = rtrim( $result, '/' ); // Remove trailing slash.
 			return $result;
 		}
 		
