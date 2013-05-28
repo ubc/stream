@@ -6,7 +6,7 @@
  * Description: A simple integration for multisite and nodejs
  * Author: Enej Bajgoric Devindra Payment, CTLT, UBC
  */
-//require( 'carry_update_posts.php' ); // This is the sample plugin
+// require( 'carry_update_posts.php' ); // This is the sample plugin
 
 if ( ! class_exists( 'CTLT_Stream' ) ):
 	define( 'CTLT_STREAM', true );
@@ -29,7 +29,7 @@ if ( ! class_exists( 'CTLT_Stream' ) ):
 			self::$url_override = get_site_option( 'stream_url_override', "on" );
 			self::$node_url = self::get_node_url();
 			
-			add_action( 'init',      array(__CLASS__, 'register_script' ) );
+			add_action( 'init',      array(__CLASS__, 'register_script' ), 5 );
 			add_action( 'wp_footer', array(__CLASS__, 'print_script' ) );
 			
 			add_action( 'admin_init', array(__CLASS__, 'load' ) );
@@ -140,6 +140,7 @@ if ( ! class_exists( 'CTLT_Stream' ) ):
 			if ( isset( self::$node_url ) ):
 				wp_register_script( 'socket', self::$node_url.'/socket.io/socket.io.js', array( 'jquery' ) );
 				wp_register_script( 'socket-main', plugins_url('/js/main.js', __FILE__), array( 'jquery', 'socket' ) );
+				
 				wp_localize_script( 'socket', 'stream_plugin', array(
 					'blog_key' => self::$blog_key,
 					'url' => self::$node_url,
