@@ -6,7 +6,7 @@
  * Description: A simple integration for multisite and nodejs
  * Author: Enej Bajgoric Devindra Payment, CTLT, UBC
  */
-require( 'carry_update_posts.php' ); // This is the sample plugin
+//require( 'carry_update_posts.php' ); // This is the sample plugin
 
 if ( ! class_exists( 'CTLT_Stream' ) ):
 	define( 'CTLT_STREAM', true );
