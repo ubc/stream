@@ -20,6 +20,12 @@ Adds a framework for integrating wordpress plugins with Node JS.
 5. In command line, run "node app.js"
 6. Update the stream setting found in Settings -> Stream
 
+Would recommend running the service using something like forever https://github.com/nodejitsu/forever
+
+Info here: http://blog.nodejitsu.com/keep-a-nodejs-server-up-with-forever
+
+OR 
+
 Note: If you have upstart (http://upstart.ubuntu.com), running do init script so you can run the app as a service.
 
 Example:
